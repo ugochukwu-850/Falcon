@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/static/sass/main.css" />
+    <script src="/static/controls/main.js"></script>
+    <link rel="shortcut icon" href="/static/images/illustrations/top_nav/falcon.png" type="image/.png" />
+    <title>Falcon 0.1.0</title>
+  </head>
+
+  <body>
+    <nav>
+      <div class="logo">
+        <img src="/static/images/illustrations/top_nav/falcon.png" alt="" />
+        <span>Falcon CBT Generator</span>
+      </div>
+      <div class="actions">
+        <div class="action_boxes">
+          <a href="/generate">
+            <img src="/static/images/illustrations/top_nav/new_quiz.png" alt="" />
+            <span>New Quiz</span>
+          </a>
+        </div>
+
+        <div class="action_boxes">
+          <a href="/questions">
+            <img src="/static/images/illustrations/top_nav/questions.png" alt="" />
+            <span>Questions</span>
+          </a>
+        </div>
+
+        <div class="action_boxes">
+          <a href="#">
+            <img src="/static/images/illustrations/top_nav/back-to-draft.png" alt="" />
+            <span>Drafts</span>
+          </a>
+        </div>
+
+        <div class="action_boxes">
+          <a href="/list_files">
+            <img src="/static/images/illustrations/top_nav/files.png" alt="" />
+            <span>Files</span>
+          </a>
+        </div>
+        <div class="profile">
+          <div class="data">
+            <img src="{{ user.profile_pic_url }}" alt="" />
+            <span>Signed In</span>
+          </div>
+          <button id="logout">Logout</button>
+          <img id="menu" src="/static/images/illustrations/top_nav/menu-2.png" alt="" />
+        </div>
+      </div>
+    </nav>
+
+    <div class="welcome">
+      <div class="greetings">
+        <h2><span id="greetings_text">Good Morning</span>Mr {{ user.name }}</h2>
+        <h5>Lets generate some forms</h5>
+        {% if message %}
+          <div class="message">
+            <span>New Message: {{ message }}</span>
+          </div>
+        {% endif %}
+      </div>
+      <div class="stats">
+        <div class="stat_box">
+          <img src="/static/images/illustrations/top_nav/files.png" alt="" />
+          <span>{{user["total_files"]}}</span>
+          <span>Files</span>
+        </div>
+        <div class="stat_box">
+          <img src="/static/images/illustrations/top_nav/questions.png" alt="" />
+          <span>{{user["total_questions"]}}</span>
+          <span>Questions</span>
+        </div>
+        <div class="stat_box">
+          <img src="/static/images/illustrations/top_nav/back-to-draft.png" alt="" />
+          <span>{{user["total_drafts"]}}</span>
+          <span>Drafts</span>
+        </div>
+      </div>
+    </div>
+
+    {% if add_file %}
+      <form action="/load" method="post" enctype="multipart/form-data" class="form_load">
+        <div class="meta_data">
+          <legend>
+            Filename:<input type="text" name="title" required="true" id="title" placeholder="Document Title" />
+          </legend>
+          <legend>
+            Select Class<select name="class" required="true" id="" class="class_selection">
+              <option value="Year 7">Year 7</option>
+              <option value="Year 8">Year 8</option>
+              <option value="Year 9">Year 9</option>
+              <option value="Year 10">Year 10</option>
+              <option value="Year 11">Year 11</option>
+              <option value="Year 12">Year 12</option>
+            </select>
+          </legend>
+          <input type="submit" value="Upload Note" />
+        </div>
+        <div class="add_file">
+          <input type="file" name="file" id="" required="true" accept=".pdf, .doc, .docx" />
+
+          <img src="/static/images/illustrations/top_nav/download-from-ftp (1).png" alt="" />
+          <span>Drag and Drop or Browse File</span>
+          <span>FILES SELECTED WOULD BE UPLOADED TO DRIVE</span>
+        </div>
+      </form>
+    {% endif %}
+
+    {% if questions %}
+      <div class="questions">
+        <div class="sub_header">
+          <h3>Questions</h3>
+
+          <a href="#" class="see_all_questions">
+            <span>
+              See all
+              <img src="/static/images/illustrations/top_nav/circled-right-2.png" alt="" />
+            </span>
+          </a>
+        </div>
+        <div class="content">
+          {% for question in questions %}
+            <div class="question_div">
+              <!-- Using the grid layout -->
+              <img src="/static/images/illustrations/top_nav/document.png" alt="" />
+              <span>{{ question['title'] }}</span>
+              <span>{{ question['created'] }}</span>
+              <a href="{{question["link"]}}" target="_blank">
+                <span>View in Forms</span>
+                <img src="/static/images/illustrations/top_nav/external-link.png" alt="" />
+              </a>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+
+    {% if files %}
+      <div class="files">
+        <div class="sub_header">
+          <h3>Files</h3>
+          <a href="#" class="see_all_questions"><span>See all <img src="/static/images/illustrations/top_nav/circled-right-2.png" alt="" /></span></a>
+        </div>
+        <div class="content">
+          {% for file in files %}
+            <div class="file_boxes">
+              <div class="top_info">
+                <img src="/static/images/illustrations/top_nav/document.png" alt="" />
+                <div class="right">
+                  <span>{{ file['name']|spliter }}</span>
+                  <span>{{ file['created'] }}</span>
+                </div>
+              </div>
+              <div class="buttom">
+                <span>{{ file['class'] }}</span>
+                <span>{{ file['name'] }}</span>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+
+    {% if filehome %}
+      {% for class, files in filehome.items() %}
+      {% if files | length > 0 %}
+        <div class="files">
+          <div class="sub_header">
+            <h3>{{class}}</h3>
+            <a href="#" class="see_all_questions" style="display: none;"><span>See all <img src="/static/images/illustrations/top_nav/circled-right-2.png" alt="" /></span></a>
+          </div>
+          <div class="content">
+            {% for file in files %}
+              <div class="file_boxes">
+                <div class="top_info">
+                  <img src="/static/images/illustrations/top_nav/document.png" alt="" />
+                  <div class="right">
+                    <span>{{ file['name']|spliter }}</span>
+                    <span>{{ file['created'] }}</span>
+                  </div>
+                </div>
+                <div class="buttom">
+                  <span>{{ file['class'] }}</span>
+                  <span>{{ file['name'] }}</span>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+
+    {% if create_quiz %}
+      <form action="#" class="create_quiz" onsubmit="return false;" autocomplete="off">
+        <div class="inputs">
+          <div class="left_inputs">
+            <legend>
+              <span>Form Title:</span><input type="text" id="formTitle" name="form_title" placeholder="Form Title" />
+            </legend>
+            <legend>
+              <span>Description:</span><input type="text" id="formDescription" name="description" placeholder="Description" />
+            </legend>
+            <legend>
+              <span>Document Title:</span><input type="text" placeholder="Default to form title" name="document_title" id="documentTitle" />
+            </legend>
+          </div>
+          <div class="right_inputs">
+            <div class="setting">
+              <div>
+                <input type="checkbox" name="isQuiz" id="isQuiz" />
+                <img src="/static/images/illustrations/top_nav/add-file.png" alt="" />
+              </div>
+              <h4>Make Quiz</h4>
+            </div>
+            <div class="setting">
+              <div>
+                <input type="checkbox" name="isShuffled" id="isShuffled" />
+                <img src="/static/images/illustrations/top_nav/add-file.png" alt="" />
+              </div>
+              <h4>Shuffle</h4>
+            </div>
+          </div>
+          <div class="final_actions">
+            <input type="number" id="amountOfFiles" value="1" min="1" max="20" placeholder="0" value="1" />
+            <input type="submit" id="submit_generation" value="Generate 1 Question" />
+          </div>
+        </div>
+        <div class="classes">
+          <div class="header">
+            <h2>Select Class to generate questions</h2>
+          </div>
+          <div class="class">
+            <div>
+              <input type="radio" checked="true" name="isQuiz" value="Year 7" class="is_selected_class" />
+              <img src="/static/images/illustrations/top_nav/add-file.png" alt="" />
+            </div>
+            <h4>Year 7</h4>
+          </div>
+          <div class="class">
+            <div>
+              <input type="radio" name="isQuiz" value="Year 8" class="is_selected_class" />
+              <img src="/static/images/illustrations/top_nav/add-file.png" alt="" />
+            </div>
+            <h4>Year 8</h4>
+          </div>
+          <div class="class">
+            <div>
+              <input type="radio" name="isQuiz" value="Year 9" class="is_selected_class" />
+              <img src="/static/images/illustrations/top_nav/add-file.png" alt="" />
+            </div>
+            <h4>Year 9</h4>
+          </div>
+          <div class="class">
+            <div>
+              <input type="radio" name="isQuiz" value="Year 10" class="is_selected_class" />
+              <img src="/static/images/illustrations/top_nav/add-file.png" alt="" />
+            </div>
+            <h4>Year 10</h4>
+          </div>
+          <div class="class">
+            <div>
+              <input type="radio" name="isQuiz" value="Year 11" class="is_selected_class" />
+              <img src="/static/images/illustrations/top_nav/add-file.png" alt="" />
+            </div>
+            <h4>Year 11</h4>
+          </div>
+          <div class="class">
+            <div>
+              <input type="radio" name="isQuiz" value="Year 12" class="is_selected_class" />
+              <img src="/static/images/illustrations/top_nav/add-file.png" alt="" />
+            </div>
+            <h4>Year 12</h4>
+          </div>
+        </div>
+      </form>
+    {% endif %}
+
+    {% if create_quiz %}
+      <div class="files_div">
+        <div class="header">
+          <h2>Select files to generate question</h2>
+        </div>
+        <div class="files_select" id="file_selection_container">
+          {% for note in notes %}
+            <div class="file_selectable">
+              <div>
+                <span id="doc_id" hidden="true">{{ note['id'] }}</span>
+                <input type="checkbox" class="selectable_file" name="selected_file" id="selected_file" />
+                <img src="/static/images/illustrations/top_nav/add-file.png" alt="" />
+              </div>
+              <h4>{{ note['name'] }}</h4>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+
+    <!--       
+    <div class="questions_role">
+        <div class="headers">
+            <input type="text" placeholder="Title">
+            <input type="text" placeholder="Description">
+        </div>
+        <div class="questions" id="question_container">
+            <form method="post" action="#" class="questions_container">
+                <div class="question">
+                    <input type="text" placeholder="Question" value="" class="Question_node">
+                    <div class="answer_div">
+                        <input type="radio" name="correct" class="select_correct">
+                        <input type="text" name="answers" id="" class="answers">
+                    </div>
+                    <div class="answer_div">
+                        <input type="radio" name="correct" class="select_correct">
+                        <input type="text" name="answers" id="" class="answers">
+                    </div>
+                    <div class="answer_div">
+                        <input type="radio" name="correct" class="select_correct">
+                        <input type="text" name="answers" id="" class="answers">
+                    </div>
+                    <div class="answer_div">
+                        <input type="radio" name="correct" class="select_correct">
+                        <input type="text" name="answers" id="" class="answers">
+                    </div>
+                </div>
+            </form>
+            <form method="post" action="#" class="questions_container">
+                <div class="question">
+                    <input type="text" placeholder="Question" value="" class="Question_node">
+                    <div class="answer_div">
+                        <input type="radio" name="correct" class="select_correct">
+                        <input type="text" name="answers" id="" class="answers">
+                    </div>
+                    <div class="answer_div">
+                        <input type="radio" name="correct" class="select_correct">
+                        <input type="text" name="answers" id="" class="answers">
+                    </div>
+                    <div class="answer_div">
+                        <input type="radio" name="correct" class="select_correct">
+                        <input type="text" name="answers" id="" class="answers">
+                    </div>
+                    <div class="answer_div">
+                        <input type="radio" name="correct" class="select_correct">
+                        <input type="text" name="answers" id="" class="answers">
+                    </div>
+                </div>
+            </form>
+            <form method="post" action="#" class="questions_container">
+                <div class="question">
+                    <input type="text" placeholder="Question" value="" class="Question_node">
+                    <div class="answer_div">
+                        <input type="radio" name="correct" class="select_correct">
+                        <input type="text" name="answers" id="" class="answers">
+                    </div>
+                    <div class="answer_div">
+                        <input type="radio" name="correct" class="select_correct">
+                        <input type="text" name="answers" id="" class="answers">
+                    </div>
+                    <div class="answer_div">
+                        <input type="radio" name="correct" class="select_correct">
+                        <input type="text" name="answers" id="" class="answers">
+                    </div>
+                    <div class="answer_div">
+                        <input type="radio" name="correct" class="select_correct">
+                        <input type="text" name="answers" id="" class="answers">
+                    </div>
+                </div>
+            </form>
+            <form method="post" action="#" class="questions_container">
+                <div class="question">
+                    <input type="text" placeholder="Question" value="" class="Question_node">
+                    <div class="answer_div">
+                        <input type="radio" name="correct" class="select_correct">
+                        <input type="text" name="answers" id="" class="answers">
+                    </div>
+                    <div class="answer_div">
+                        <input type="radio" name="correct" class="select_correct">
+                        <input type="text" name="answers" id="" class="answers">
+                    </div>
+                    <div class="answer_div">
+                        <input type="radio" name="correct" class="select_correct">
+                        <input type="text" name="answers" id="" class="answers">
+                    </div>
+                    <div class="answer_div">
+                        <input type="radio" name="correct" class="select_correct">
+                        <input type="text" name="answers" id="" class="answers">
+                    </div>
+                </div>
+            </form>
+            <form method="post" action="#" class="questions_container">
+                <div class="question">
+                    <input type="text" placeholder="Question" value="" class="Question_node">
+                    <div class="answer_div">
+                        <input type="radio" name="correct" class="select_correct">
+                        <input type="text" name="answers" id="" class="answers">
+                    </div>
+                    <div class="answer_div">
+                        <input type="radio" name="correct" class="select_correct">
+                        <input type="text" name="answers" id="" class="answers">
+                    </div>
+                    <div class="answer_div">
+                        <input type="radio" name="correct" class="select_correct">
+                        <input type="text" name="answers" id="" class="answers">
+                    </div>
+                    <div class="answer_div">
+                        <input type="radio" name="correct" class="select_correct">
+                        <input type="text" name="answers" id="" class="answers">
+                    </div>
+                </div>
+            </form>
+            <form method="post" action="#" class="questions_container">
+                <div class="question">
+                    <input type="text" placeholder="Question" value="" class="Question_node">
+                    <div class="answer_div">
+                        <input type="radio" name="correct" class="select_correct">
+                        <input type="text" name="answers" id="" class="answers">
+                    </div>
+                    <div class="answer_div">
+                        <input type="radio" name="correct" class="select_correct">
+                        <input type="text" name="answers" id="" class="answers">
+                    </div>
+                    <div class="answer_div">
+                        <input type="radio" name="correct" class="select_correct">
+                        <input type="text" name="answers" id="" class="answers">
+                    </div>
+                    <div class="answer_div">
+                        <input type="radio" name="correct" class="select_correct">
+                        <input type="text" name="answers" id="" class="answers">
+                    </div>
+                </div>
+            </form>
+            <form method="post" action="#" class="questions_container">
+                <div class="question">
+                    <input type="text" placeholder="Question" value="" class="Question_node">
+                    <div class="answer_div">
+                        <input type="radio" name="correct" class="select_correct">
+                        <input type="text" name="answers" id="" class="answers">
+                    </div>
+                    <div class="answer_div">
+                        <input type="radio" name="correct" class="select_correct">
+                        <input type="text" name="answers" id="" class="answers">
+                    </div>
+                    <div class="answer_div">
+                        <input type="radio" name="correct" class="select_correct">
+                        <input type="text" name="answers" id="" class="answers">
+                    </div>
+                    <div class="answer_div">
+                        <input type="radio" name="correct" class="select_correct">
+                        <input type="text" name="answers" id="" class="answers">
+                    </div>
+                </div>
+            </form>
+
+            <div class="final_submit">
+                <button>Save as Drafts</button>
+                <button>Upload Document</button>
+            </div>
+        </div>
+    </div>
+           -->
+
+    <!-- links to resources https://icons8.com/icon/102647/versions -->
+    {% if footer %}
+      <footer>Code by ZG ASPIRE</footer>
+    {% endif %}
+  </body>
+  <script></script>
+</html>
