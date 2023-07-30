@@ -16,12 +16,11 @@ The Teacher's Sync and Assessment Tool is a web application designed to assist t
 
 ## Technologies Used
 
-- **Frontend:** HTML, CSS, JavaScript, React
-- **Backend:** Node.js, Express.js
+- **Frontend:** HTML, CSS, JavaScript
+- **Backend:** Flask
 - **Database:** MongoDB
 - **Authentication:** Google OAuth2
 - **Natural Language Processing:** OpenAI GPT-3
-- **Deployment:** Docker, Kubernetes
 
 ## Getting Started
 
