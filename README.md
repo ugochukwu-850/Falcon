@@ -1,4 +1,4 @@
-# Teacher's Sync and Assessment Tool
+# Falcon
 
 ![Logo](static/images/illustrations/xel.jpeg)
 
@@ -27,7 +27,7 @@ The Teacher's Sync and Assessment Tool is a web application designed to assist t
 
 Follow these steps to get the application up and running on your local machine:
 
-1. Clone the repository: `git clone https://github.com/your-username/teachers-sync-assessment.git`
+1. Clone the repository: `git clone https://github.com/ugochukwu-850/Falcon.git`
 2. Install dependencies: `python freeze > requirements.txt`
 3. Set up your Google OAuth2 credentials and OpenAI API key. Update the respective configuration files accordingly.
 4. Set up your MongoDB connection string.
