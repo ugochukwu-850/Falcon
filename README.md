@@ -2,8 +2,7 @@
 
 ![Logo](static/images/illustrations/xel.jpeg)
 
-
-The Teacher's Sync and Assessment Tool is a web application designed to assist teachers in staying in sync with their notes and assessments, while also providing the ability to automatically create assessments. The tool leverages modern technologies such as Google OAuth2 for authentication, OpenAI for natural language processing, and MongoDB as the database for seamless data management.
+Falcon is a web application designed to assist teachers in staying in sync with their notes and assessments, while also providing the ability to automatically create assessments. The tool leverages modern technologies such as Google OAuth2 for authentication, OpenAI for natural language processing, and MongoDB as the database for seamless data management.
 
 ## Features
 
@@ -51,7 +50,7 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## Contact
 
-For any inquiries or support, please contact us at `support@teacherstool.com`. We'd be happy to assist you!
+For any inquiries or support, please contact us at `ugochukwuchizaramoku@gmail.com`. We'd be happy to assist you!
 
 ---
 
