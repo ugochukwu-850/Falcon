@@ -44,11 +44,11 @@ document.addEventListener("DOMContentLoaded", () => {
         amount.addEventListener("input", () => {
             action.removeAttribute("disabled", "false")
             if (parseInt(amount.value) > 20) {
-                action.value = `Reduce amount of questions`;
+                action.value = "Reduce amount of questions";
                 action.setAttribute("disabled", "true");
             }
             else if (parseInt(amount.value) <= 1) {
-                action.value = `Generate 1 Question`;
+                action.value = "Generate 1 Question";
             }
             else {
                 action.value = `Generate ${amount.value} Questions`;
@@ -161,7 +161,7 @@ document.addEventListener("DOMContentLoaded", () => {
         //create a question_role dom element and add to body
         var question_role = document.createElement("div");
         question_role.className = "questions_role";
-        question_role.innerHTML = `<img src="/static/images/illustrations/loading.gif" style="margin: auto;">`
+        question_role.innerHTML = '<img src="/static/images/illustrations/loading.gif" style="margin: auto;">'
 
         document.querySelector("body").append(question_role);
 
